@@ -30,20 +30,20 @@ docker-compose logs -f superset-init
 
 When the command above will finish work, go to http://localhost:8088/dashboard/list/. Dashboards available without authorization. To access SQL Lab use admin/admin as login and password.
 
-![Apache Superset](imgs/superset.png)
+![Apache Superset](https://raw.githubusercontent.com/caretdev/superset-iris/main/imgs/superset.png)
 
 With SQL Lab access to powerful SQL editor
 
-![Apache Superset](imgs/sqllab.png)
+![Apache Superset](https://raw.githubusercontent.com/caretdev/superset-iris/main/imgs/sqllab.png)
 
 It is possible to upload CSV files to IRIS. Go to Settings, [Database Connections](http://localhost:8088/databaseview/list/). Edit action on database.
 
-![Databases list](imgs/databases.png)
+![Databases list](https://raw.githubusercontent.com/caretdev/superset-iris/main/imgs/databases.png)
 
 In the modal dialog, go to Advanced, Security and check `Allow file uploads to database` and Finish
 
-![Edit database](imgs/edit-database.png)
+![Edit database](https://raw.githubusercontent.com/caretdev/superset-iris/main/imgs/edit-database.png)
 
 And now [import CSV](http://localhost:8088/csvtodatabaseview/form) is available
 
-![Import CSV](imgs/import-csv.png)
+![Import CSV](https://raw.githubusercontent.com/caretdev/superset-iris/main/imgs/import-csv.png)
