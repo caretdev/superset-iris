@@ -1,0 +1,5 @@
+import os
+
+SECRET_KEY = os.getenv("SUPERSET_SECRET_KEY")
+
+PUBLIC_ROLE_LIKE = os.getenv("SUPERSET_PUBLIC_ROLE_LIKE")

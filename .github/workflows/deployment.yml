@@ -1,0 +1,64 @@
+name: Cloud Run Deploy
+
+on:
+  workflow_dispatch:
+
+env:
+  # Change this section according to your needs
+  IMAGE_NAME:   superset
+  SERVICE:      superset
+  DOMAIN_NAME:  superset.demo.community.intersystems.com
+  ENV_VARS:     ${{ secrets.ENV_VARS }}
+
+# Leave this section untouched
+  PROJECT_ID:   iris-community-demos
+  CLUSTER_NAME: demo
+  GITHUB_SHA:   ${{ github.sha }}
+  GCR_LOCATION: eu.gcr.io
+  REGION:       europe-west2
+  NAMESPACE:    demo
+
+jobs:
+  deploy-cloud-run:
+    if: github.event.repository.fork == false && github.event.repository.is_template == false
+    name: Deploy to Cloud Run
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: 'Cloud Auth'
+      uses: 'google-github-actions/auth@v0'
+      with:
+        credentials_json: '${{ secrets.SERVICE_ACCOUNT_KEY }}'
+
+    - name: Setup Cloud SDK
+      uses: google-github-actions/setup-gcloud@v1
+
+    - name: Authorize Docker push
+      run: |
+        gcloud auth list
+        gcloud auth configure-docker
+
+    - name: Build and Push image
+      run: |
+        docker buildx build -t ${GCR_LOCATION}/${PROJECT_ID}/${IMAGE_NAME}:${GITHUB_SHA} --push .
+
+    - name: Deploy to Cloud Run
+      run: |
+        echo "[INFO] Set google project..."
+        gcloud config set project ${PROJECT_ID}
+
+        echo "[INFO] Deploy service..."
+        gcloud run deploy ${SERVICE}   \
+          --platform gke               \
+          --cluster ${CLUSTER_NAME}    \
+          --cluster-location ${REGION} \
+          --namespace ${NAMESPACE}     \
+          --port 8088                  \
+          --set-env-vars=${ENV_VARS}   \
+          --min-instances 1            \
+          --memory 1Gi                 \
+          --timeout 300                \
+          --verbosity debug            \
+          --image ${GCR_LOCATION}/${PROJECT_ID}/${IMAGE_NAME}:${GITHUB_SHA}
