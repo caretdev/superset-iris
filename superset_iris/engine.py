@@ -39,13 +39,15 @@ class IRISEngineSpec(BaseEngineSpec, BasicParametersMixin):
 
     allow_limit_clause = False
 
+    max_column_name_length = 50
+
     sqlalchemy_uri_placeholder = 'iris://_SYSTEM:SYS@iris:1972/USER'
     parameters_schema = IRISParametersSchema()
 
     _time_grain_expressions = {
         None: "{col}",
         "P1D": "CAST({col} AS Date)",
-        "P1W": "DATEADD(DAY, - ((DATEPART(WEEKDAY, {col}}) + 5) # 7), {col}})",
+        "P1W": "DATEADD(DAY, 1 - ((DATEPART(WEEKDAY, {col}) + 5) # 7), {col})",
         "P1M": "DATEADD(MONTH, DATEDIFF(MONTH, 1, {col}), 1)",
         "P3M": "DATEADD(QUARTER, DATEDIFF(MONTH, 1, {col}) \ 3, 1)",
         "P1Y": "DATEADD(YEAR, DATEDIFF(YEAR, 1, {col}) \ 3, 1)",
