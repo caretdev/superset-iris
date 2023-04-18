@@ -28,6 +28,11 @@ docker-compose up -d
 docker-compose logs -f superset-init
 ```
 
+> In addition there is `docker-compose-simple.yml` file, which contains only superset and IRIS, it loads examples too, but with no way to see the progress, but through Superset UI
+> ```
+> docker-compose -f docker-compose-simple.yml up -d --build 
+> ```
+
 When the command above will finish work, go to http://localhost:8088/dashboard/list/. Dashboards available without authorization. To access SQL Lab use admin/admin as login and password.
 
 ![Apache Superset](https://raw.githubusercontent.com/caretdev/superset-iris/main/imgs/superset.png)
