@@ -36,10 +36,13 @@ services:
 
   iris:
     env_file: *superset-env-file
-    image: intersystemsdc/iris-community
+    image: containers.intersystems.com/intersystems/iris-community:2023.1.0.226.0
     ports:
       - 1972
       - 52773
+    command:
+      - -a
+      - iris session iris -U%SYS '##class(Security.Users).UnExpireUserPasswords("*")'
 
   db:
     env_file: *superset-env-file

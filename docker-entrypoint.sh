@@ -1,5 +1,7 @@
 #!/bin/bash
 
+superset db upgrade
+
 superset fab create-admin \
             --username admin \
             --firstname Superset \
@@ -7,8 +9,10 @@ superset fab create-admin \
             --email admin@superset.com \
             --password ${ADMIN_PASSWORD:-admin}
 
-superset db upgrade
-
 superset init
+
+if [ "${SUPERSET_SQLALCHEMY_EXAMPLES_URI}" = "iris://"* ]; then
+    superset load-examples &
+fi
 
 /usr/bin/run-server.sh
