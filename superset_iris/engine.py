@@ -84,14 +84,14 @@ class IRISEngineSpec(BaseEngineSpec, BasicParametersMixin):
 
     _time_grain_expressions = {
         None: "{col}",
-        "PT1S": "CAST(TO_CHAR({col}, 'YYYY-MM-DD HH24:MM:SS') AS DATETIME)",
-        "PT1M": "CAST(TO_CHAR({col}, 'YYYY-MM-DD HH24:MM:00') AS DATETIME)",
-        "PT1H": "CAST(TO_CHAR({col}, 'YYYY-MM-DD HH24:00:00') AS DATETIME)",
-        "P1D": "CAST({col} AS Date)",
-        "P1W": "DATEADD(DAY, 1 - ((DATEPART(WEEKDAY, {col}) + 5) # 7), {col})",
-        "P1M": "DATEADD(MONTH, DATEDIFF(MONTH, 1, {col}), 1)",
-        "P3M": "DATEADD(QUARTER, DATEDIFF(MONTH, 1, {col}) \ 3, 1)",
-        "P1Y": "DATEADD(YEAR, DATEDIFF(YEAR, 1, {col}), 1)",
+        "PT1S": "CAST(TO_CHAR(CAST({col} AS TIMESTAMP), 'YYYY-MM-DD HH24:MM:SS') AS DATETIME)",
+        "PT1M": "CAST(TO_CHAR(CAST({col} AS TIMESTAMP), 'YYYY-MM-DD HH24:MM:00') AS DATETIME)",
+        "PT1H": "CAST(TO_CHAR(CAST({col} AS TIMESTAMP), 'YYYY-MM-DD HH24:00:00') AS DATETIME)",
+        "P1D": "CAST(CAST({col} AS TIMESTAMP) AS Date)",
+        "P1W": "CAST(DATEADD(DAY, 1 - MOD((DATEPART(WEEKDAY, {col}) + 5), 7), {col}) AS DATE)",
+        "P1M": "CAST(DATEADD(MONTH, DATEDIFF(MONTH, 1, {col}), 1) AS DATE)",
+        "P3M": "CAST(DATEADD(QUARTER, DATEDIFF(MONTH, 1, {col}) \ 3, 1) AS DATE)",
+        "P1Y": "CAST(DATEADD(YEAR, DATEDIFF(YEAR, 1, {col}), 1) AS DATE)",
     }
 
     custom_errors: Dict[Pattern[str], Tuple[str, SupersetErrorType, Dict[str, Any]]] = {
