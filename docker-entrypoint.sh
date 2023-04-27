@@ -12,7 +12,7 @@ superset fab create-admin \
 superset init
 
 if [[ "${SUPERSET_SQLALCHEMY_EXAMPLES_URI}" =~ ^iris:// ]]; then
-    superset load-examples &
+    superset load-examples -t -b &
 fi
 
 /usr/bin/run-server.sh
