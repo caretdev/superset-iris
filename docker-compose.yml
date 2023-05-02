@@ -16,7 +16,7 @@
 #
 x-superset-image: &superset-image apache/superset:2.1.0
 x-superset-depends-on: &superset-depends-on
-  - db
+  - iris
   - redis
 x-superset-volumes: &superset-volumes
   # /app/pythonpath_docker will be appended to the PYTHONPATH in the final container
@@ -36,21 +36,11 @@ services:
 
   iris:
     env_file: *superset-env-file
-    image: containers.intersystems.com/intersystems/iris-community:2023.1.0.226.0
+    image: intersystemsdc/iris-community:latest
+    restart: unless-stopped
     ports:
       - 1972
       - 52773
-    command:
-      - -a
-      - iris session iris -U%SYS '##class(Security.Users).UnExpireUserPasswords("*")'
-
-  db:
-    env_file: *superset-env-file
-    image: postgres:14
-    container_name: superset_db
-    restart: unless-stopped
-    volumes:
-      - db_home:/var/lib/postgresql/data
 
   superset:
     env_file: *superset-env-file
@@ -101,8 +91,6 @@ services:
 
 volumes:
   superset_home:
-    external: false
-  db_home:
     external: false
   redis:
     external: false
