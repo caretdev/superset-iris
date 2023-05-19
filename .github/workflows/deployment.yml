@@ -58,6 +58,8 @@ jobs:
           --namespace ${NAMESPACE}     \
           --port 8088                  \
           --set-env-vars=${ENV_VARS}   \
+          --set-env-vars=SUPERSET_LOAD_EXAMPLES=yes   \
+          --set-env-vars=SUPERSET_SECRET_KEY=$(openssl rand -base64 42)   \
           --min-instances 1            \
           --memory 1Gi                 \
           --timeout 300                \
