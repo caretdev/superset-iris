@@ -21,7 +21,7 @@ set -e
 
 # Initialize the database
 
-superset db upgrade 2>&1
+superset db upgrade > /proc/1/fd/1 2>&1 
 
 gunicorn \
     --daemon \
@@ -43,12 +43,14 @@ superset fab create-admin \
               --firstname Superset \
               --lastname Admin \
               --email admin@superset.com \
-              --password ${ADMIN_PASSWORD:-admin} 2>&1
+              --password ${ADMIN_PASSWORD:-admin} > /proc/1/fd/1 2>&1 
 
 # Create default roles and permissions
-superset init 2>&1
+superset init > /proc/1/fd/1 2>&1 
 
+echo "SUPERSET_LOAD_EXAMPLES = $SUPERSET_LOAD_EXAMPLES"
 if [ "$SUPERSET_LOAD_EXAMPLES" = "yes" ]; then
-    # Load some data to play with
-    superset load_examples 2>&1 &
+    echo "Load some data to play with"
+    superset load_examples > /proc/1/fd/1 2>&1 
 fi
+echo "DONE"
