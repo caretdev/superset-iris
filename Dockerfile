@@ -1,4 +1,4 @@
-FROM apache/superset:2.1.0
+FROM apache/superset:4.0.1
 
 RUN --mount=type=bind,src=.,dst=/tmp/dist/superset-iris \
     mkdir -p ~/superset-iris/ && \
