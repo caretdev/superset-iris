@@ -25,8 +25,7 @@ from superset.constants import USER_AGENT
 from superset.errors import ErrorLevel, SupersetErrorType, SupersetError
 from superset.sql_parse import Table
 from superset.databases.utils import make_url_safe
-from sqlalchemy.engine.base import Engine
-from sqlalchemy.engine.url import URL
+from sqlalchemy import engine
 from superset.utils.core import GenericDataType
 from typing_extensions import TypedDict
 
@@ -112,6 +111,7 @@ class IRISEngineSpec(BaseEngineSpec, BasicParametersMixin):
 
         return extra
 
+    @classmethod
     def build_sqlalchemy_uri(
         cls,
         parameters: IRISParametersType,
@@ -120,8 +120,8 @@ class IRISEngineSpec(BaseEngineSpec, BasicParametersMixin):
         ] = None,
     ) -> str:
         url = str(
-            URL(
-                "iris",
+            engine.URL.create(
+                drivername="iris",
                 username=parameters.get("username"),
                 password=parameters.get("password"),
                 host=parameters.get("host"),
